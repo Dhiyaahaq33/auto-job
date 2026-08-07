@@ -30,3 +30,9 @@ node_modules/
 # os
 .DS_Store
 Thumbs.db
+.claude/
+*.log
+backtest_out.txt
+*.timestamp-*.mjs
+dashboard.exe
+.claude/worktrees/
