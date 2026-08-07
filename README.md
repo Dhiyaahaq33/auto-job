@@ -91,3 +91,4 @@ Selain kredensial, ada juga pengaturan non-secret di dalam `CONFIG` pada `job_bo
 - Bot ini melakukan otomasi login dan pengiriman lamaran nyata ke situs pihak ketiga (LinkedIn, Indeed, Jobstreet, Glints). Gunakan dengan bijak dan pahami risiko pelanggaran Terms of Service masing-masing platform (potensi suspend/ban akun).
 - Pastikan CSS selector di masing-masing bot (LinkedIn, Indeed, Jobstreet, Glints) tetap sesuai dengan struktur halaman terbaru situs — situs pihak ketiga bisa berubah sewaktu-waktu sehingga selector perlu disesuaikan ulang.
 - File `applied_jobs.json` (tracker riwayat lamaran) dibuat otomatis saat bot pertama kali berjalan.
+# test-trigger 1786097794
