@@ -9,6 +9,8 @@ secrets.toml
 *.key
 credentials.json
 token.json
+cv.pdf
+cover_letter.txt
 
 # runtime state / local data
 *.db

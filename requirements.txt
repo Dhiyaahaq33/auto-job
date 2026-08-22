@@ -1,0 +1,8 @@
+selenium
+undetected-chromedriver
+requests
+beautifulsoup4
+python-dotenv
+schedule
+fake-useragent
+loguru

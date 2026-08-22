@@ -1,0 +1,79 @@
+name: Auto Job Apply - Daily Run
+
+on:
+  schedule:
+    # 09:00 WIB = 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: job-bot
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore CV from secret
+        run: echo "${{ secrets.CV_BASE64 }}" | base64 -d > cv.pdf
+
+      - name: Restore cover letter (optional)
+        if: ${{ vars.HAS_COVER_LETTER == 'true' }}
+        run: echo "${{ secrets.COVER_LETTER_TEXT }}" > cover_letter.txt
+
+      - name: Run job bot
+        env:
+          NAMA: ${{ secrets.NAMA }}
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          NO_HP: ${{ secrets.NO_HP }}
+          LOKASI: ${{ secrets.LOKASI }}
+          LINKEDIN_EMAIL: ${{ secrets.LINKEDIN_EMAIL }}
+          LINKEDIN_PASS: ${{ secrets.LINKEDIN_PASS }}
+          INDEED_EMAIL: ${{ secrets.INDEED_EMAIL }}
+          INDEED_PASS: ${{ secrets.INDEED_PASS }}
+          GLINTS_EMAIL: ${{ secrets.GLINTS_EMAIL }}
+          GLINTS_PASS: ${{ secrets.GLINTS_PASS }}
+        run: python job_bot.py --sekarang
+
+      - name: Remove CV before commit (never persist it in the repo)
+        if: always()
+        run: rm -f cv.pdf cover_letter.txt
+
+      - name: Commit updated applied_jobs.json
+        if: always()
+        run: |
+          git config user.name "auto-job-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -f applied_jobs.json ] && [ -n "$(git status --porcelain applied_jobs.json)" ]; then
+            git add applied_jobs.json
+            git commit -m "chore: update applied_jobs tracker [skip ci]"
+            git push
+          else
+            echo "No tracker changes to commit."
+          fi
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-bot-logs-${{ github.run_id }}
+          path: |
+            *.log
+          if-no-files-found: ignore
+          retention-days: 14
