@@ -45,8 +45,6 @@ jobs:
           LOKASI: ${{ secrets.LOKASI }}
           LINKEDIN_EMAIL: ${{ secrets.LINKEDIN_EMAIL }}
           LINKEDIN_PASS: ${{ secrets.LINKEDIN_PASS }}
-          INDEED_EMAIL: ${{ secrets.INDEED_EMAIL }}
-          INDEED_PASS: ${{ secrets.INDEED_PASS }}
           GLINTS_EMAIL: ${{ secrets.GLINTS_EMAIL }}
           GLINTS_PASS: ${{ secrets.GLINTS_PASS }}
         run: python job_bot.py --sekarang

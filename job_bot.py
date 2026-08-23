@@ -99,7 +99,7 @@ CONFIG = {
 
     # --- Platform Toggle ---
     "aktifkan_linkedin":    True,
-    "aktifkan_indeed":      True,
+    "aktifkan_indeed":      False,  # nonaktif - akun Indeed pakai passwordless/passkey, gak bisa diotomasi
     "aktifkan_jobstreet":   True,
     "aktifkan_glints":      True,
     "aktifkan_kalibrr":     False,  # Kalibrr perlu setup tambahan
