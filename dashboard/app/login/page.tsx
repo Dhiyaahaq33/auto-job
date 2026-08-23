@@ -29,30 +29,58 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-xl border border-neutral-800 bg-neutral-900 p-6 shadow-lg"
-      >
-        <h1 className="mb-1 text-lg font-semibold text-neutral-100">Auto Job Dashboard</h1>
-        <p className="mb-6 text-sm text-neutral-400">Masuk buat kelola bot lamaran kerja.</p>
-        <input
-          type="password"
-          autoFocus
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="mb-3 w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-neutral-100 outline-none focus:border-neutral-500"
-        />
-        {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-900 transition hover:bg-white disabled:opacity-50"
+    <div
+      className="flex min-h-screen items-center justify-center px-4"
+      style={{ background: "var(--background)" }}
+    >
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <p className="font-display text-2xl italic tracking-tight text-[var(--foreground)]">
+            Auto Job Apply
+          </p>
+          <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-[var(--muted-2)]">
+            Panel Kendali
+          </p>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-md border p-7 shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset]"
+          style={{ background: "var(--surface)", borderColor: "var(--border)" }}
         >
-          {loading ? "Memproses..." : "Masuk"}
-        </button>
-      </form>
+          <label className="mb-2 block text-[11px] uppercase tracking-[0.15em] text-[var(--muted)]">
+            Kata Sandi
+          </label>
+          <input
+            type="password"
+            autoFocus
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="mb-4 w-full rounded border bg-transparent px-3.5 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted-2)] focus:border-[var(--accent)]"
+            style={{ borderColor: "var(--border-strong)" }}
+          />
+
+          {error && (
+            <p className="mb-4 rounded border px-3 py-2 text-xs" style={{ borderColor: "var(--danger)", background: "var(--danger-bg)", color: "var(--danger)" }}>
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded py-2.5 text-sm font-medium tracking-wide transition disabled:opacity-50"
+            style={{ background: "var(--accent)", color: "var(--accent-foreground)" }}
+          >
+            {loading ? "Memproses…" : "Masuk"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-[11px] text-[var(--muted-2)]">
+          Dhiyaahaq33 / auto-job
+        </p>
+      </div>
     </div>
   );
 }

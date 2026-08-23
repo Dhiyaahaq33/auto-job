@@ -160,7 +160,7 @@ def load_tracker():
     if Path(TRACKER_FILE).exists():
         with open(TRACKER_FILE, "r") as f:
             return json.load(f)
-    return {"applied": [], "total_hari_ini": 0, "tanggal": str(datetime.now().date())}
+    return {"applied": {}, "total_hari_ini": 0, "tanggal": str(datetime.now().date())}
 
 def save_tracker(data):
     with open(TRACKER_FILE, "w") as f:
@@ -169,10 +169,15 @@ def save_tracker(data):
 def sudah_diapply(tracker, job_id):
     return job_id in tracker["applied"]
 
-def catat_apply(tracker, job_id, info=""):
-    tracker["applied"].append(job_id)
+def catat_apply(tracker, job_id, platform, title="", url=""):
+    tracker["applied"][job_id] = {
+        "platform": platform,
+        "title": title or job_id,
+        "url": url,
+        "applied_at": datetime.now().isoformat(timespec="seconds"),
+    }
     tracker["total_hari_ini"] += 1
-    logger.info(f"✅ Applied: {job_id} | {info} | Total hari ini: {tracker['total_hari_ini']}")
+    logger.info(f"✅ Applied: {job_id} | {title} | Total hari ini: {tracker['total_hari_ini']}")
     save_tracker(tracker)
 
 def reset_daily_counter(tracker):
@@ -325,6 +330,8 @@ class LinkedInBot:
                 if sudah_diapply(self.tracker, f"linkedin_{job_id}"):
                     continue
 
+                job_title = (job.text.strip().split("\n")[0][:120] if job.text.strip() else keyword)
+
                 klik_safe(self.driver, job)
                 jeda(2, 3)
 
@@ -341,7 +348,7 @@ class LinkedInBot:
 
                 self._isi_form_linkedin()
 
-                catat_apply(self.tracker, f"linkedin_{job_id}", keyword)
+                catat_apply(self.tracker, f"linkedin_{job_id}", "linkedin", job_title, self.driver.current_url)
                 jeda(3, 7)
 
             except Exception as e:
@@ -493,7 +500,7 @@ class IndeedBot:
 
                 # Isi form apply
                 self._isi_form_indeed()
-                catat_apply(self.tracker, f"indeed_{job_id}", job_title)
+                catat_apply(self.tracker, f"indeed_{job_id}", "indeed", job_title, self.driver.current_url)
                 jeda(3, 8)
 
             except Exception as e:
@@ -594,7 +601,7 @@ class JobstreetBot:
                     # Jobstreet akan redirect ke form apply
                     # Isi form dasar
                     self._isi_form()
-                    catat_apply(self.tracker, f"jobstreet_{job_id}", keyword)
+                    catat_apply(self.tracker, f"jobstreet_{job_id}", "jobstreet", link.text.strip() or keyword, job_url)
 
                 self.driver.close()
                 self.driver.switch_to.window(self.driver.window_handles[0])
@@ -687,6 +694,8 @@ class GlintsBot:
                 if not job_id or sudah_diapply(self.tracker, f"glints_{job_id}"):
                     continue
 
+                job_title = (job.text.strip().split("\n")[0][:120] if job.text.strip() else keyword)
+
                 klik_safe(self.driver, job)
                 jeda(2, 3)
 
@@ -715,7 +724,7 @@ class GlintsBot:
                 except Exception:
                     pass
 
-                catat_apply(self.tracker, f"glints_{job_id}", keyword)
+                catat_apply(self.tracker, f"glints_{job_id}", "glints", job_title, self.driver.current_url)
                 self.driver.back()
                 jeda(3, 6)
 
