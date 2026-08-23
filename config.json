@@ -1,8 +1,19 @@
 {
-  "kata_kunci": ["Python Developer", "Backend Engineer", "Data Analyst"],
-  "tipe_kerja": ["remote", "full-time"],
+  "kata_kunci": [
+    "Python Developer",
+    "Backend Engineer",
+    "Data Analyst"
+  ],
+  "tipe_kerja": [
+    "remote",
+    "full-time"
+  ],
   "gaji_min": 5000000,
-  "lokasi_kerja": ["Jakarta", "Remote", "Surabaya"],
+  "lokasi_kerja": [
+    "Jakarta",
+    "Remote",
+    "Surabaya"
+  ],
   "max_apply_per_hari": 30,
   "jam_mulai": "09:00",
   "aktifkan_linkedin": true,
