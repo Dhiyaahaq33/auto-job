@@ -106,6 +106,33 @@ CONFIG = {
 }
 
 # ============================================================
+# CONFIG OVERRIDE - config.json (diedit lewat dashboard web)
+# Cuma override setting non-rahasia; kredensial tetap dari env var/secret.
+# ============================================================
+_CONFIG_JSON_PATH = Path(__file__).parent / "config.json"
+_EDITABLE_KEYS = {
+    "kata_kunci", "tipe_kerja", "gaji_min", "lokasi_kerja",
+    "max_apply_per_hari", "jam_mulai",
+    "aktifkan_linkedin", "aktifkan_indeed", "aktifkan_jobstreet",
+    "aktifkan_glints", "aktifkan_kalibrr",
+}
+
+def _muat_config_json():
+    if not _CONFIG_JSON_PATH.exists():
+        return
+    try:
+        with open(_CONFIG_JSON_PATH, "r", encoding="utf-8") as f:
+            override = json.load(f)
+        for key, value in override.items():
+            if key in _EDITABLE_KEYS:
+                CONFIG[key] = value
+        logger.info(f"Config dimuat dari {_CONFIG_JSON_PATH.name}")
+    except Exception as e:
+        logger.warning(f"Gagal muat config.json, pakai default: {e}")
+
+_muat_config_json()
+
+# ============================================================
 # COVER LETTER TEMPLATE (auto-generate jika file tidak ada)
 # ============================================================
 COVER_LETTER_TEMPLATE = """
